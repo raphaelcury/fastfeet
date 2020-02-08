@@ -1,19 +1,23 @@
-module.exports = (sequelize, DataTypes) => {
-  const Recipient = sequelize.define(
-    'Recipient',
-    {
-      name: DataTypes.STRING,
-      address: DataTypes.STRING,
-      number: DataTypes.INTEGER,
-      complement: DataTypes.STRING,
-      state: DataTypes.STRING,
-      city: DataTypes.STRING,
-      zip_code: DataTypes.STRING,
-    },
-    {}
-  );
-  Recipient.associate = function() {
-    // associations can be defined here
-  };
-  return Recipient;
-};
+import Sequelize, { Model } from 'sequelize';
+
+class Recipient extends Model {
+  static init(sequelize) {
+    super.init(
+      {
+        name: Sequelize.STRING,
+        address: Sequelize.STRING,
+        number: Sequelize.INTEGER,
+        complement: Sequelize.STRING,
+        state: Sequelize.STRING,
+        city: Sequelize.STRING,
+        zip_code: Sequelize.STRING,
+      },
+      {
+        sequelize,
+      }
+    );
+    return this;
+  }
+}
+
+export default Recipient;
