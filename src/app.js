@@ -1,5 +1,8 @@
 import express from 'express';
+
 import routes from './routes';
+import './database';
+// invoca o database criando a conexão com o banco através dos models
 
 class App {
   constructor() {

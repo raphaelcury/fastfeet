@@ -33,17 +33,17 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
     });
   },
   down: queryInterface => {
-    return queryInterface.dropTable('Recipients');
+    return queryInterface.dropTable('recipients');
   },
 };

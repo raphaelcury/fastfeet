@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 // Controllers
+import RecipientController from './app/controllers/RecipientController';
 
 // Middleware de autenticação
 
@@ -15,8 +16,6 @@ routes.post('/sessions', (req, res) => {
 });
 
 // A partir daqui o middleware de autenticação se aplica
-routes.get('/recipients', (req, res) => {
-  return res.json({ msg: 'RECIPIENTS OK' });
-});
+routes.post('/recipients', RecipientController.store);
 
 export default routes;
