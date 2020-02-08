@@ -7,7 +7,11 @@ import { Router } from 'express';
 const routes = new Router();
 
 // Rotas sem autenticacao
-routes.get('/recipients', (req, res) => {
+routes.post('/sessions', (req, res) => {
+  return res.json({ msg: 'NEW SESSION OK' });
+});
+
+routes.get('/test', (req, res) => {
   return res.json({ msg: 'OK' });
 });
 
