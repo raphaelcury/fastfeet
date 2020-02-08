@@ -16,7 +16,9 @@ routes.post('/sessions', (req, res) => {
 });
 
 // A partir daqui o middleware de autenticação se aplica
-routes.get('/recipients/:id', RecipientController.show);
 routes.post('/recipients', RecipientController.store);
+routes.get('/recipients/:id', RecipientController.show);
+routes.put('/recipients/:id', RecipientController.update);
+routes.delete('/recipients/:id', RecipientController.delete);
 
 export default routes;

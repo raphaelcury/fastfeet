@@ -60,11 +60,57 @@ class RecipientController {
     }
   }
 
-  update() {}
+  async update(req, res) {
+    try {
+      const recipient = await Recipient.findByPk(req.params.id);
+      if (!recipient) {
+        // Bad request
+        return res.status(400).json({ error: 'Recipient not found.' });
+      }
+      const {
+        id,
+        name,
+        address,
+        number,
+        complement,
+        state,
+        city,
+        zip_code,
+      } = await recipient.update(req.body);
+      return res.json({
+        id,
+        name,
+        address,
+        number,
+        complement,
+        state,
+        city,
+        zip_code,
+      });
+    } catch (error) {
+      return res.json({
+        error: `Erro Consulta BD: ${error}`,
+      });
+    }
+  }
 
-  delete() {}
-
-  index() {}
+  async delete(req, res) {
+    try {
+      const recipient = await Recipient.findByPk(req.params.id);
+      if (!recipient) {
+        // Bad request
+        return res.status(400).json({ error: 'Recipient not found.' });
+      }
+      const { id } = await recipient.destroy();
+      return res.json({
+        msg: `Recipient id ${id} deleted.`,
+      });
+    } catch (error) {
+      return res.json({
+        error: `Erro Consulta BD: ${error}`,
+      });
+    }
+  }
 }
 
 export default new RecipientController();
