@@ -26,7 +26,7 @@ class RecipientController {
       });
     } catch (error) {
       return res.json({
-        error: `Erro DB: ${error}`,
+        error: `Erro BD: ${error}`,
       });
     }
   }
@@ -55,7 +55,7 @@ class RecipientController {
       });
     } catch (error) {
       return res.json({
-        error: `Erro Consulta BD: ${error}`,
+        error: `Erro BD: ${error}`,
       });
     }
   }
@@ -89,7 +89,7 @@ class RecipientController {
       });
     } catch (error) {
       return res.json({
-        error: `Erro Consulta BD: ${error}`,
+        error: `Erro BD: ${error}`,
       });
     }
   }
@@ -107,7 +107,7 @@ class RecipientController {
       });
     } catch (error) {
       return res.json({
-        error: `Erro Consulta BD: ${error}`,
+        error: `Erro BD: ${error}`,
       });
     }
   }
