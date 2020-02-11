@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
 
+import User from '../models/User';
+
 import authConfig from '../../config/auth';
 
 class Auth {
@@ -19,6 +21,19 @@ class Auth {
     } catch (error) {
       // Token inválido
       return res.status(401).json({ error: 'Invalid token' });
+    }
+  }
+
+  static async verifyAdminUser(req, res, next) {
+    try {
+      const user = await User.findByPk(req.userId);
+      if (!user.admin) {
+        return res.status(401).json({ error: 'User is not admin' });
+      }
+      return next();
+    } catch (error) {
+      // Usuário não é admin
+      return res.status(401).json({ error });
     }
   }
 }
