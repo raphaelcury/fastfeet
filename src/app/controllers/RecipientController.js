@@ -7,7 +7,7 @@ class RecipientController {
       const {
         id,
         name,
-        street,
+        address,
         number,
         complement,
         state,
@@ -17,7 +17,7 @@ class RecipientController {
       return res.json({
         id,
         name,
-        street,
+        address,
         number,
         complement,
         state,
@@ -36,7 +36,7 @@ class RecipientController {
       const {
         id,
         name,
-        street,
+        address,
         number,
         complement,
         state,
@@ -46,7 +46,7 @@ class RecipientController {
       return res.json({
         id,
         name,
-        street,
+        address,
         number,
         complement,
         state,
