@@ -19,11 +19,12 @@ class SessionController {
       });
 
       try {
-        await schema.validate(req.body);
+        // abortEarly = false para mostrar todos os erros encontrados
+        await schema.validate(req.body, { abortEarly: false });
       } catch (error) {
-        return res
-          .status(400)
-          .json({ error: `Validation error: ${error.errors}` });
+        return res.status(400).json({
+          error: `Validation errors: ${JSON.stringify(error.errors)}`,
+        });
       }
 
       // Procura email para validar senha
