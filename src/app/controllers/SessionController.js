@@ -1,3 +1,4 @@
+import * as Yup from 'yup';
 import jwt from 'jsonwebtoken';
 
 import User from '../models/User';
@@ -6,6 +7,20 @@ import authConfig from '../../config/auth';
 class SessionController {
   async store(req, res) {
     try {
+      // Validação da entrada
+      const schema = Yup.object().shape({
+        email: Yup.string()
+          .email()
+          .required(),
+        password: Yup.string()
+          .required()
+          .min(6),
+      });
+
+      if (!(await schema.isValid(req.body))) {
+        return res.status(400).json({ error: 'Validation error' });
+      }
+
       // Procura email para validar senha
       const user = await User.findOne({ where: { email: req.body.email } });
       // Se usuário não encontrado, erro 401
