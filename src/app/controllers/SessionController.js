@@ -1,3 +1,4 @@
+import promisify from 'util';
 import * as Yup from 'yup';
 import jwt from 'jsonwebtoken';
 
@@ -17,8 +18,12 @@ class SessionController {
           .min(6),
       });
 
-      if (!(await schema.isValid(req.body))) {
-        return res.status(400).json({ error: 'Validation error' });
+      try {
+        await schema.validate(req.body);
+      } catch (error) {
+        return res
+          .status(400)
+          .json({ error: `Validation error: ${error.errors}` });
       }
 
       // Procura email para validar senha
