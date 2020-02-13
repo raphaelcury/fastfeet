@@ -1,4 +1,3 @@
-import promisify from 'util';
 import * as Yup from 'yup';
 import jwt from 'jsonwebtoken';
 
