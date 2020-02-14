@@ -2,6 +2,9 @@ import * as Yup from 'yup';
 
 import Recipient from '../models/Recipient';
 
+const stateRegEx = /^[A-Z]{2}$/;
+const errorMessageStateRegEx = 'State must be 2 capital letters';
+
 class RecipientController {
   async store(req, res) {
     // Validação da entrada
@@ -12,7 +15,7 @@ class RecipientController {
       complement: Yup.string(),
       state: Yup.string()
         .required()
-        .max(2),
+        .matches(stateRegEx, errorMessageStateRegEx),
       city: Yup.string().required(),
       zip_code: Yup.string().required(),
     });
@@ -105,7 +108,9 @@ class RecipientController {
         address: Yup.string(),
         number: Yup.number(),
         complement: Yup.string(),
-        state: Yup.string().max(2),
+        state: Yup.string()
+          .required()
+          .matches(stateRegEx, errorMessageStateRegEx),
         city: Yup.string(),
         zip_code: Yup.string(),
       });
