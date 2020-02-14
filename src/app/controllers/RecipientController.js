@@ -1,7 +1,31 @@
+import * as Yup from 'yup';
+
 import Recipient from '../models/Recipient';
 
 class RecipientController {
   async store(req, res) {
+    // Validação da entrada
+    const schema = Yup.object().shape({
+      name: Yup.string().required(),
+      address: Yup.string().required(),
+      number: Yup.number().required(),
+      complement: Yup.string(),
+      state: Yup.string()
+        .required()
+        .max(2),
+      city: Yup.string().required(),
+      zip_code: Yup.string().required(),
+    });
+
+    try {
+      // abortEarly = false para mostrar todos os erros encontrados
+      await schema.validate(req.body, { abortEarly: false });
+    } catch (error) {
+      return res.status(400).json({
+        error: `Validation errors: ${JSON.stringify(error.errors)}`,
+      });
+    }
+
     // Cria recipient
     try {
       const {
@@ -33,6 +57,12 @@ class RecipientController {
 
   async show(req, res) {
     try {
+      const recipient = await Recipient.findByPk(req.params.id);
+      if (!recipient) {
+        // Bad request
+        return res.status(400).json({ error: 'Recipient not found.' });
+      }
+
       const {
         id,
         name,
@@ -42,7 +72,8 @@ class RecipientController {
         state,
         city,
         zip_code,
-      } = await Recipient.findOne({ where: { id: req.params.id } });
+      } = recipient;
+
       return res.json({
         id,
         name,
@@ -67,6 +98,27 @@ class RecipientController {
         // Bad request
         return res.status(400).json({ error: 'Recipient not found.' });
       }
+
+      // Validação da entrada
+      const schema = Yup.object().shape({
+        name: Yup.string(),
+        address: Yup.string(),
+        number: Yup.number(),
+        complement: Yup.string(),
+        state: Yup.string().max(2),
+        city: Yup.string(),
+        zip_code: Yup.string(),
+      });
+
+      try {
+        // abortEarly = false para mostrar todos os erros encontrados
+        await schema.validate(req.body, { abortEarly: false });
+      } catch (error) {
+        return res.status(400).json({
+          error: `Validation errors: ${JSON.stringify(error.errors)}`,
+        });
+      }
+
       const {
         id,
         name,
