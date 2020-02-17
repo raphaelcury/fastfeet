@@ -151,7 +151,7 @@ class RecipientController {
     }
   }
 
-  async delete(req, res) {
+  async destroy(req, res) {
     try {
       const recipient = await Recipient.findByPk(req.params.id);
       if (!recipient) {

@@ -15,11 +15,12 @@ routes.post('/sessions', SessionController.store); // autenticação
 // A partir daqui o middleware de autenticação se aplica
 routes.use(Auth.verifyToken);
 routes.get('/recipients/:id', RecipientController.show);
+routes.get('/recipients/:id', RecipientController.show);
 
 // A partir daqui o middleware de verificação de admin se aplica
 routes.use(Auth.verifyAdminUser);
 routes.post('/recipients', RecipientController.store);
 routes.put('/recipients/:id', RecipientController.update);
-routes.delete('/recipients/:id', RecipientController.delete);
+routes.delete('/recipients/:id', RecipientController.destroy);
 
 export default routes;
