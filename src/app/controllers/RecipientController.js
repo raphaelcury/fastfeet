@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-import Recipient from '../models/Recipient';
+import Recipient from '../models/recipient';
 
 const stateRegEx = /^[A-Z]{2}$/;
 const errorMessageStateRegEx = 'State must be 2 capital letters';
