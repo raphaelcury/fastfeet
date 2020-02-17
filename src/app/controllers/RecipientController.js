@@ -58,6 +58,20 @@ class RecipientController {
     }
   }
 
+  async index(req, res) {
+    try {
+      const recipientList = await Recipient.findAll();
+
+      return res.json({
+        recipientList,
+      });
+    } catch (error) {
+      return res.json({
+        error: `Erro BD: ${error}`,
+      });
+    }
+  }
+
   async show(req, res) {
     try {
       const recipient = await Recipient.findByPk(req.params.id);
