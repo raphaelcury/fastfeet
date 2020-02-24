@@ -38,7 +38,6 @@ class SessionController {
     // Se email/senha ok, gera token de sessão com id de usuário e retorna
     // Payload é o id do usuário
     const { id, name, email } = user;
-    console.log(authConfig);
     const token = jwt.sign({ id }, authConfig.secret, {
       expiresIn: authConfig.expiresIn,
     });
