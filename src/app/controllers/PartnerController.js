@@ -1,4 +1,5 @@
 import { Op } from 'sequelize';
+import * as Yup from 'yup';
 import Partner from '../models/Partner';
 
 class PartnerController {
@@ -8,8 +9,19 @@ class PartnerController {
   }
 
   async show(req, res) {
-    const { id } = req.params;
-    const partner = await Partner.findByPk(id);
+    const schema = Yup.object().shape({
+      id: Yup.number().required(),
+    });
+    try {
+      // abortEarly = false to show all errors
+      await schema.validate(req.params, { abortEarly: false });
+    } catch (error) {
+      return res.status(400).json({
+        error: `Validation errors: ${JSON.stringify(error.errors)}`,
+      });
+    }
+
+    const partner = await Partner.findByPk(req.params.id);
     if (!partner) {
       return res.status(400).json({ error: 'Partner does not exist' });
     }
@@ -17,6 +29,20 @@ class PartnerController {
   }
 
   async store(req, res) {
+    const schema = Yup.object().shape({
+      name: Yup.string().required(),
+      email: Yup.string()
+        .email()
+        .required(),
+    });
+    try {
+      // abortEarly = false para mostrar todos os erros encontrados
+      await schema.validate(req.body, { abortEarly: false });
+    } catch (error) {
+      return res.status(400).json({
+        error: `Validation errors: ${JSON.stringify(error.errors)}`,
+      });
+    }
     const partnerWithSameEmail = await Partner.findOne({
       where: {
         email: req.body.email,
@@ -30,6 +56,24 @@ class PartnerController {
   }
 
   async update(req, res) {
+    const schemaId = Yup.object().shape({
+      id: Yup.number().required(),
+    });
+    const schemaData = Yup.object().shape({
+      name: Yup.string().required(),
+      email: Yup.string()
+        .email()
+        .required(),
+    });
+    try {
+      // abortEarly = false para mostrar todos os erros encontrados
+      await schemaId.validate(req.params, { abortEarly: false });
+      await schemaData.validate(req.body, { abortEarly: false });
+    } catch (error) {
+      return res.status(400).json({
+        error: `Validation errors: ${JSON.stringify(error.errors)}`,
+      });
+    }
     const { id } = req.params;
     const partner = await Partner.findByPk(id);
     if (!partner) {
@@ -51,6 +95,17 @@ class PartnerController {
   }
 
   async delete(req, res) {
+    const schema = Yup.object().shape({
+      id: Yup.number().required(),
+    });
+    try {
+      // abortEarly = false to show all errors
+      await schema.validate(req.params, { abortEarly: false });
+    } catch (error) {
+      return res.status(400).json({
+        error: `Validation errors: ${JSON.stringify(error.errors)}`,
+      });
+    }
     const partner = await Partner.findByPk(req.params.id);
     if (!partner) {
       return res.status(400).json({ error: 'Partner does not exist' });
