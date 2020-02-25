@@ -3,34 +3,6 @@ import * as Yup from 'yup';
 
 import Partner from '../models/Partner';
 
-async function verifyId(params) {
-  const schema = Yup.object().shape({
-    id: Yup.number().required(),
-  });
-  try {
-    // abortEarly = false to show all errors
-    await schema.validate(params, { abortEarly: false });
-  } catch (error) {
-    return error.errors;
-  }
-  return null;
-}
-async function verifyData(body) {
-  const schema = Yup.object().shape({
-    name: Yup.string().required(),
-    email: Yup.string()
-      .email()
-      .required(),
-  });
-  try {
-    // abortEarly = false para mostrar todos os erros encontrados
-    await schema.validate(body, { abortEarly: false });
-  } catch (error) {
-    return error.errors;
-  }
-  return null;
-}
-
 class PartnerController {
   async index(req, res) {
     const partners = await Partner.findAll();
@@ -38,10 +10,6 @@ class PartnerController {
   }
 
   async show(req, res) {
-    const validationErrors = await verifyId(req.params);
-    if (validationErrors) {
-      return res.status(400).json({ validationErrors });
-    }
     const partner = await Partner.findByPk(req.params.id);
     if (!partner) {
       return res.status(400).json({ error: 'Partner does not exist' });
@@ -50,9 +18,17 @@ class PartnerController {
   }
 
   async store(req, res) {
-    const validationErrors = await verifyData(req.body);
-    if (validationErrors) {
-      return res.status(400).json({ validationErrors });
+    const schema = Yup.object().shape({
+      name: Yup.string().required(),
+      email: Yup.string()
+        .email()
+        .required(),
+    });
+    try {
+      // abortEarly = false para mostrar todos os erros encontrados
+      await schema.validate(req.body, { abortEarly: false });
+    } catch (error) {
+      return res.status(400).json({ validationErrors: error.errors });
     }
     const partnerWithSameEmail = await Partner.findOne({
       where: {
@@ -67,27 +43,31 @@ class PartnerController {
   }
 
   async update(req, res) {
-    const validationErrorsId = await verifyId(req.params);
-    if (validationErrorsId) {
-      return res.status(400).json({ validationErrors: validationErrorsId });
-    }
-    const validationErrorsData = await verifyData(req.body);
-    if (validationErrorsData) {
-      return res.status(400).json({ validationErrors: validationErrorsData });
+    const schema = Yup.object().shape({
+      name: Yup.string(),
+      email: Yup.string().email(),
+    });
+    try {
+      // abortEarly = false para mostrar todos os erros encontrados
+      await schema.validate(req.body, { abortEarly: false });
+    } catch (error) {
+      return res.status(400).json({ validationErrors: error.errors });
     }
     const { id } = req.params;
     const partner = await Partner.findByPk(id);
     if (!partner) {
       return res.status(400).json({ error: 'Partner does not exist' });
     }
-    const partnerWithSameEmail = await Partner.findOne({
-      where: {
-        id: { [Op.not]: id },
-        email: req.body.email,
-      },
-    });
-    if (partnerWithSameEmail) {
-      return res.status(400).json({ error: 'Email already exists' });
+    if (req.body.email) {
+      const partnerWithSameEmail = await Partner.findOne({
+        where: {
+          id: { [Op.not]: id },
+          email: req.body.email,
+        },
+      });
+      if (partnerWithSameEmail) {
+        return res.status(400).json({ error: 'Email already exists' });
+      }
     }
     const { name, email, createdAt, updatedAt } = await partner.update(
       req.body
@@ -96,10 +76,6 @@ class PartnerController {
   }
 
   async delete(req, res) {
-    const validationErrors = await verifyId(req.params);
-    if (validationErrors) {
-      return res.status(400).json({ validationErrors });
-    }
     const partner = await Partner.findByPk(req.params.id);
     if (!partner) {
       return res.status(400).json({ error: 'Partner does not exist' });
