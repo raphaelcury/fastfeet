@@ -142,7 +142,7 @@ class RecipientController {
     });
   }
 
-  async destroy(req, res) {
+  async delete(req, res) {
     const recipient = await Recipient.findByPk(req.params.id);
     if (!recipient) {
       // Bad request
