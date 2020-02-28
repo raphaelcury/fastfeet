@@ -4,6 +4,7 @@ import { Router } from 'express';
 import SessionController from './app/controllers/SessionController';
 import RecipientController from './app/controllers/RecipientController';
 import PartnerController from './app/controllers/PartnerController';
+import DeliveryController from './app/controllers/DeliveryController';
 
 // Authentication Middleware
 import Auth from './app/middlewares/Auth';
@@ -29,5 +30,9 @@ routes.get('/partners', PartnerController.index);
 routes.get('/partners/:id', PartnerController.show);
 routes.put('/partners/:id', PartnerController.update);
 routes.delete('/partners/:id', PartnerController.delete);
+
+routes.get('/deliveries', DeliveryController.index);
+routes.get('/partners/:id', PartnerController.show);
+routes.post('/deliveries', DeliveryController.store);
 
 export default routes;
