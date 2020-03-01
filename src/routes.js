@@ -31,8 +31,11 @@ routes.get('/partners/:id', PartnerController.show);
 routes.put('/partners/:id', PartnerController.update);
 routes.delete('/partners/:id', PartnerController.delete);
 
-routes.get('/deliveries', DeliveryController.index);
-routes.get('/partners/:id', PartnerController.show);
 routes.post('/deliveries', DeliveryController.store);
+routes.get('/deliveries', DeliveryController.index);
+routes.put('/deliveries/:id', DeliveryController.update);
+routes.put('/deliveries/:id/start', DeliveryController.start);
+routes.put('/deliveries/:id/end', DeliveryController.end);
+routes.delete('/deliveries/:id', DeliveryController.delete);
 
 export default routes;
