@@ -19,7 +19,7 @@ class DeliveryController {
       product: Yup.string().required(),
     });
     try {
-      // abortEarly = false para mostrar todos os erros encontrados
+      // abortEarly = false to show all the errors found
       await schema.validate(req.body, { abortEarly: false });
     } catch (error) {
       return res.status(400).json({ errors: error.errors });
@@ -35,7 +35,7 @@ class DeliveryController {
       product: Yup.string(),
     });
     try {
-      // abortEarly = false para mostrar todos os erros encontrados
+      // abortEarly = false to show all the errors found
       await schema.validate(req.body, { abortEarly: false });
     } catch (error) {
       return res.status(400).json({ errors: error.errors });

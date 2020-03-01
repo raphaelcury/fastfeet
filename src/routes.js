@@ -12,7 +12,7 @@ import Auth from './app/middlewares/Auth';
 const routes = new Router();
 
 // No auth routes
-routes.post('/sessions', SessionController.store); // autenticação
+routes.post('/sessions', SessionController.store); // authentication
 
 // Auth routes
 routes.use(Auth.verifyToken);

@@ -13,13 +13,13 @@ class Auth {
     }
     const [, token] = authHeader.split(' ');
     try {
-      // Usar versão assíncrona pois é mais eficiente
+      // It is more efficient to use the async version of jwt.verify
       const decoded = await promisify(jwt.verify)(token, authConfig.secret);
-      // Seta id do usuário para ser usado nas reqs seguintes
+      // Sets userId for next middlewares
       req.userId = decoded.id;
       return next();
     } catch (error) {
-      // Token inválido
+      // Invalid token
       return res.status(401).json({ error: 'Invalid token' });
     }
   }
@@ -32,7 +32,7 @@ class Auth {
       }
       return next();
     } catch (error) {
-      // Usuário não é admin
+      // User is not admin
       return res.status(401).json({ error });
     }
   }

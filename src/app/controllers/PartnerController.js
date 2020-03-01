@@ -25,7 +25,7 @@ class PartnerController {
         .required(),
     });
     try {
-      // abortEarly = false para mostrar todos os erros encontrados
+      // abortEarly = false to show all the errors found
       await schema.validate(req.body, { abortEarly: false });
     } catch (error) {
       return res.status(400).json({ validationErrors: error.errors });
@@ -48,7 +48,7 @@ class PartnerController {
       email: Yup.string().email(),
     });
     try {
-      // abortEarly = false para mostrar todos os erros encontrados
+      // abortEarly = false to show all the errors found
       await schema.validate(req.body, { abortEarly: false });
     } catch (error) {
       return res.status(400).json({ validationErrors: error.errors });

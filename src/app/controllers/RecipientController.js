@@ -7,7 +7,7 @@ const errorMessageStateRegEx = 'State must be 2 capital letters';
 
 class RecipientController {
   async store(req, res) {
-    // Validação da entrada
+    // Input validation
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       address: Yup.string().required(),
@@ -21,16 +21,13 @@ class RecipientController {
     });
 
     try {
-      // abortEarly = false para mostrar todos os erros encontrados
+      // abortEarly = false para to show all the errors found
       await schema.validate(req.body, { abortEarly: false });
     } catch (error) {
       return res.status(400).json({
         error: `Validation errors: ${JSON.stringify(error.errors)}`,
       });
     }
-
-    // Cria recipient
-
     const {
       id,
       name,
@@ -98,7 +95,7 @@ class RecipientController {
       return res.status(400).json({ error: 'Recipient not found.' });
     }
 
-    // Validação da entrada
+    // Input validation
     const schema = Yup.object().shape({
       name: Yup.string(),
       address: Yup.string(),
@@ -112,7 +109,7 @@ class RecipientController {
     });
 
     try {
-      // abortEarly = false para mostrar todos os erros encontrados
+      // abortEarly = false to show all the errors found
       await schema.validate(req.body, { abortEarly: false });
     } catch (error) {
       return res.status(400).json({
