@@ -13,6 +13,30 @@ class DeliveryController {
   }
 
   async store(req, res) {
+    if (req.body.signature_id) {
+      return res.status(400).json({
+        error:
+          'You can not sign a delivery this way. Instead, use the update method',
+      });
+    }
+    if (req.body.canceled_at) {
+      return res.status(400).json({
+        error:
+          'You can not cancel a delivery this way. Instead, use the delete method',
+      });
+    }
+    if (req.body.start_date) {
+      return res.status(400).json({
+        error:
+          'You can not start a delivery this way. Instead, use the start method',
+      });
+    }
+    if (req.body.end_date) {
+      return res.status(400).json({
+        error:
+          'You can not end a delivery this way. Instead, use the end method',
+      });
+    }
     const schema = Yup.object().shape({
       recipient_id: Yup.number().required(),
       partner_id: Yup.number().required(),
@@ -29,6 +53,24 @@ class DeliveryController {
   }
 
   async update(req, res) {
+    if (req.body.canceled_at) {
+      return res.status(400).json({
+        error:
+          'You can not cancel a delivery this way. Instead, use the delete method',
+      });
+    }
+    if (req.body.start_date) {
+      return res.status(400).json({
+        error:
+          'You can not start a delivery this way. Instead, use the start method',
+      });
+    }
+    if (req.body.end_date) {
+      return res.status(400).json({
+        error:
+          'You can not end a delivery this way. Instead, use the end method',
+      });
+    }
     const schema = Yup.object().shape({
       recipient_id: Yup.number(),
       partner_id: Yup.number(),
