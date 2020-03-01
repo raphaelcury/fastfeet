@@ -12,6 +12,17 @@ class DeliveryController {
     return res.json(deliveries);
   }
 
+  async partnerIndex(req, res) {
+    const deliveries = await Delivery.findAll({
+      where: {
+        partner_id: req.params.partnerId,
+        canceled_at: null,
+        end_date: null,
+      },
+    });
+    return res.json(deliveries);
+  }
+
   async store(req, res) {
     if (req.body.signature_id) {
       return res.status(400).json({
@@ -114,7 +125,9 @@ class DeliveryController {
   }
 
   async start(req, res) {
-    const delivery = await Delivery.findByPk(req.params.id);
+    const delivery = await Delivery.findOne({
+      where: { partner_id: req.params.partnerId, id: req.params.deliveryId },
+    });
     if (!delivery) {
       return res.status(400).json({ error: 'Delivery does not exist' });
     }
@@ -140,7 +153,9 @@ class DeliveryController {
   }
 
   async end(req, res) {
-    const delivery = await Delivery.findByPk(req.params.id);
+    const delivery = await Delivery.findOne({
+      where: { partner_id: req.params.partnerId, id: req.params.deliveryId },
+    });
     if (!delivery) {
       return res.status(400).json({ error: 'Delivery does not exist' });
     }

@@ -18,6 +18,15 @@ routes.post('/sessions', SessionController.store); // authentication
 routes.use(Auth.verifyToken);
 routes.get('/recipients', RecipientController.index);
 routes.get('/recipients/:id', RecipientController.show);
+routes.get('/partners/:partnerId/deliveries', DeliveryController.partnerIndex);
+routes.put(
+  '/partners/:partnerId/deliveries/:deliveryId/start',
+  DeliveryController.start
+);
+routes.put(
+  '/partners/:partnerId/deliveries/:deliveryId/end',
+  DeliveryController.end
+);
 
 // Admin routes
 routes.use(Auth.verifyAdminUser);
@@ -33,8 +42,6 @@ routes.delete('/partners/:id', PartnerController.delete);
 routes.post('/deliveries', DeliveryController.store);
 routes.get('/deliveries', DeliveryController.index);
 routes.put('/deliveries/:id', DeliveryController.update);
-routes.put('/deliveries/:id/start', DeliveryController.start);
-routes.put('/deliveries/:id/end', DeliveryController.end);
 routes.delete('/deliveries/:id', DeliveryController.delete);
 
 export default routes;
