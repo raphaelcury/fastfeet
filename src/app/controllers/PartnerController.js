@@ -9,14 +9,6 @@ class PartnerController {
     return res.json(partners);
   }
 
-  async show(req, res) {
-    const partner = await Partner.findByPk(req.params.id);
-    if (!partner) {
-      return res.status(400).json({ error: 'Partner does not exist' });
-    }
-    return res.json(partner);
-  }
-
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),

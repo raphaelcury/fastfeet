@@ -27,7 +27,6 @@ routes.delete('/recipients/:id', RecipientController.delete);
 
 routes.post('/partners', PartnerController.store);
 routes.get('/partners', PartnerController.index);
-routes.get('/partners/:id', PartnerController.show);
 routes.put('/partners/:id', PartnerController.update);
 routes.delete('/partners/:id', PartnerController.delete);
 
