@@ -5,6 +5,7 @@ import SessionController from './app/controllers/SessionController';
 import RecipientController from './app/controllers/RecipientController';
 import PartnerController from './app/controllers/PartnerController';
 import DeliveryController from './app/controllers/DeliveryController';
+import OpenDeliveryController from './app/controllers/OpenDeliveryController';
 
 // Authentication Middleware
 import Auth from './app/middlewares/Auth';
@@ -18,14 +19,14 @@ routes.post('/sessions', SessionController.store); // authentication
 routes.use(Auth.verifyToken);
 routes.get('/recipients', RecipientController.index);
 routes.get('/recipients/:id', RecipientController.show);
-routes.get('/partners/:partnerId/deliveries', DeliveryController.partnerIndex);
+routes.get('/partners/:partnerId/openDeliveries', OpenDeliveryController.index);
 routes.put(
-  '/partners/:partnerId/deliveries/:deliveryId/start',
-  DeliveryController.start
+  '/partners/:partnerId/openDeliveries/:deliveryId/start',
+  OpenDeliveryController.start
 );
 routes.put(
-  '/partners/:partnerId/deliveries/:deliveryId/end',
-  DeliveryController.end
+  '/partners/:partnerId/openDeliveries/:deliveryId/end',
+  OpenDeliveryController.end
 );
 
 // Admin routes
