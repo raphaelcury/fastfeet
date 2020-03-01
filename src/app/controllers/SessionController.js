@@ -20,7 +20,7 @@ class SessionController {
       await schema.validate(req.body, { abortEarly: false });
     } catch (error) {
       return res.status(400).json({
-        error: `Validation errors: ${JSON.stringify(error.errors)}`,
+        errors: error.errors,
       });
     }
     // Looks for user for password validation

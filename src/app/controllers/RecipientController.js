@@ -24,7 +24,7 @@ class RecipientController {
       await schema.validate(req.body, { abortEarly: false });
     } catch (error) {
       return res.status(400).json({
-        error: `Validation errors: ${JSON.stringify(error.errors)}`,
+        errors: error.errors,
       });
     }
     const {
@@ -107,7 +107,7 @@ class RecipientController {
       await schema.validate(req.body, { abortEarly: false });
     } catch (error) {
       return res.status(400).json({
-        error: `Validation errors: ${JSON.stringify(error.errors)}`,
+        errors: error.errors,
       });
     }
     const {
