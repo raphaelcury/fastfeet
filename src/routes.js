@@ -6,6 +6,7 @@ import RecipientController from './app/controllers/RecipientController';
 import PartnerController from './app/controllers/PartnerController';
 import DeliveryController from './app/controllers/DeliveryController';
 import OpenDeliveryController from './app/controllers/OpenDeliveryController';
+import ClosedDeliveryController from './app/controllers/ClosedDeliveryController';
 
 // Authentication Middleware
 import Auth from './app/middlewares/Auth';
@@ -20,6 +21,10 @@ routes.use(Auth.verifyToken);
 routes.get('/recipients', RecipientController.index);
 routes.get('/recipients/:id', RecipientController.show);
 routes.get('/partners/:partnerId/openDeliveries', OpenDeliveryController.index);
+routes.get(
+  '/partners/:partnerId/closedDeliveries',
+  ClosedDeliveryController.index
+);
 routes.put(
   '/partners/:partnerId/openDeliveries/:deliveryId/start',
   OpenDeliveryController.start
