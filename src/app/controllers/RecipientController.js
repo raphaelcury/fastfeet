@@ -51,9 +51,7 @@ class RecipientController {
 
   async index(req, res) {
     const recipientList = await Recipient.findAll();
-    return res.json({
-      recipientList,
-    });
+    return res.json(recipientList);
   }
 
   async show(req, res) {
