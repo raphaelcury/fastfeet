@@ -15,7 +15,6 @@ class SessionController {
         .required()
         .min(6),
     });
-
     try {
       // abortEarly = false to show all the errors found
       await schema.validate(req.body, { abortEarly: false });
@@ -24,7 +23,6 @@ class SessionController {
         error: `Validation errors: ${JSON.stringify(error.errors)}`,
       });
     }
-
     // Looks for user for password validation
     const user = await User.findOne({ where: { email: req.body.email } });
     // User not found
