@@ -46,7 +46,6 @@ class OpenDeliveryController {
         },
       },
     });
-    console.log(dayDeliveries.length);
     if (dayDeliveries && dayDeliveries.length >= MAX_DELIVERIES_PER_DAY) {
       return res.status(400).json({
         error: `Partner can start only ${MAX_DELIVERIES_PER_DAY} deliveries per day`,
