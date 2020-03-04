@@ -7,6 +7,7 @@ import PartnerController from './app/controllers/PartnerController';
 import DeliveryController from './app/controllers/DeliveryController';
 import OpenDeliveryController from './app/controllers/OpenDeliveryController';
 import ClosedDeliveryController from './app/controllers/ClosedDeliveryController';
+import DeliveryProblemController from './app/controllers/DeliveryProblemController';
 
 // Authentication Middleware
 import Auth from './app/middlewares/Auth';
@@ -49,5 +50,7 @@ routes.post('/deliveries', DeliveryController.store);
 routes.get('/deliveries', DeliveryController.index);
 routes.put('/deliveries/:id', DeliveryController.update);
 routes.delete('/deliveries/:id', DeliveryController.delete);
+
+routes.get('/deliveryProblems', DeliveryProblemController.index);
 
 export default routes;
