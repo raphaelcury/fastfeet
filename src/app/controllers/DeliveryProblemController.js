@@ -1,7 +1,10 @@
+import DeliveryProblem from '../models/DeliveryProblem';
+
 class DeliveryProblemController {
   // Lists all the deliveries with a problem
   async index(req, res) {
-    return res.json({ ok: true });
+    const problems = await DeliveryProblem.findAll();
+    return res.json(problems);
   }
 }
 
