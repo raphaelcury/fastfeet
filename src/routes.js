@@ -34,6 +34,10 @@ routes.put(
   '/partners/:partnerId/openDeliveries/:deliveryId/end',
   OpenDeliveryController.end
 );
+routes.post(
+  '/deliveries/:deliveryId/problems',
+  DeliveryProblemController.store
+);
 
 // Admin routes
 routes.use(Auth.verifyAdminUser);

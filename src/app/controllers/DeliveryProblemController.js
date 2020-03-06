@@ -6,6 +6,14 @@ class DeliveryProblemController {
     const problems = await DeliveryProblem.findAll();
     return res.json(problems);
   }
+
+  async store(req, res) {
+    const problem = await DeliveryProblem.create({
+      ...req.body,
+      delivery_id: req.params.deliveryId,
+    });
+    return res.json(problem);
+  }
 }
 
 export default new DeliveryProblemController();
