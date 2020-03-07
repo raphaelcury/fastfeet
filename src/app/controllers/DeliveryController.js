@@ -1,13 +1,36 @@
 import * as Yup from 'yup';
 
 import Delivery from '../models/Delivery';
+import DeliveryProblem from '../models/DeliveryProblem';
 
 class DeliveryController {
   /* TODO: unify open and closed controllers here. Start and end methods
      should be transformed into an update method, with a query parameter type
   */
+
+  // Lists all the deliveries, or deliveries with a problem
   async index(req, res) {
-    const deliveries = await Delivery.findAll({ where: { canceled_at: null } });
+    let deliveries = [];
+    if (req.query.withProblem === 'true') {
+      // Only deliveries with a problem
+      const deliveryProblems = await DeliveryProblem.findAll({
+        include: {
+          model: Delivery,
+          as: 'delivery',
+        },
+      });
+      const deliveriesWithDuplicates = deliveryProblems.map(problem => {
+        return problem.delivery;
+      });
+      deliveries = deliveriesWithDuplicates.filter(
+        (delivery, index) =>
+          index ===
+          deliveriesWithDuplicates.findIndex(value => value.id === delivery.id)
+      );
+    } else {
+      // All not canceled deliveries
+      deliveries = await Delivery.findAll({ where: { canceled_at: null } });
+    }
     return res.json(deliveries);
   }
 
