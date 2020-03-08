@@ -34,6 +34,7 @@ routes.put(
   '/partners/:partnerId/openDeliveries/:deliveryId/end',
   OpenDeliveryController.end
 );
+routes.get('/deliveries/:deliveryId/problems', DeliveryProblemController.index);
 routes.post(
   '/deliveries/:deliveryId/problems',
   DeliveryProblemController.store
