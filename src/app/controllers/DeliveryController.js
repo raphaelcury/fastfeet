@@ -4,16 +4,23 @@ import Delivery from '../models/Delivery';
 import DeliveryProblem from '../models/DeliveryProblem';
 
 async function deliveryFilter(withProblem) {
-  // First, get all problems
+  // First, get all problems from active deliveries
   const deliveryProblems = await DeliveryProblem.findAll({
     include: {
       model: Delivery,
       as: 'delivery',
+      where: {
+        end_date: null,
+        canceled_at: null,
+      },
     },
   });
-  // Second, get all deliveries and exclude all that have related problems
+  // Second, get all active deliveries and exclude all that have related problems
   const allDeliveries = await Delivery.findAll({
-    where: { canceled_at: null },
+    where: {
+      end_date: null,
+      canceled_at: null,
+    },
   });
   // Filter the deliveries
   const deliveries = allDeliveries.filter(delivery => {
