@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 import Delivery from '../models/Delivery';
 import DeliveryProblem from '../models/DeliveryProblem';
 
+/* Filters deliveries with or without problems */
 async function deliveryFilter(withProblem) {
   // First, get all problems from active deliveries
   const deliveryProblems = await DeliveryProblem.findAll({
@@ -15,7 +16,7 @@ async function deliveryFilter(withProblem) {
       },
     },
   });
-  // Second, get all active deliveries and exclude all that have related problems
+  // Second, get all active deliveries
   const allDeliveries = await Delivery.findAll({
     where: {
       end_date: null,
@@ -155,6 +156,7 @@ class DeliveryController {
     });
   }
 
+  // Cancel delivery based on a problem
   async delete(req, res) {
     const delivery = await Delivery.findByPk(req.params.id);
     if (!delivery) {

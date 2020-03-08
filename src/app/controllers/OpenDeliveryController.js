@@ -9,6 +9,7 @@ const MIN_HOUR = 8;
 const MAX_HOUR = 18;
 
 class OpenDeliveryController {
+  /* Lists all open deliveries */
   async index(req, res) {
     const deliveries = await Delivery.findAll({
       where: {
@@ -20,6 +21,7 @@ class OpenDeliveryController {
     return res.json(deliveries);
   }
 
+  /* Starts a delivery */
   async start(req, res) {
     const delivery = await Delivery.findOne({
       where: { partner_id: req.params.partnerId, id: req.params.deliveryId },
@@ -66,6 +68,7 @@ class OpenDeliveryController {
     return res.json({ id, product, start_date });
   }
 
+  /* Ends a delivery */
   async end(req, res) {
     const delivery = await Delivery.findOne({
       where: { partner_id: req.params.partnerId, id: req.params.deliveryId },

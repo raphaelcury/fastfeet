@@ -1,7 +1,7 @@
 import DeliveryProblem from '../models/DeliveryProblem';
 
 class DeliveryProblemController {
-  // List all problems from a delivery
+  /* List all problems from a delivery */
   async index(req, res) {
     const problems = await DeliveryProblem.findAll({
       where: { delivery_id: req.params.deliveryId },
@@ -9,7 +9,7 @@ class DeliveryProblemController {
     return res.json(problems);
   }
 
-  // Creates a new delivery problem
+  /* Creates a new delivery problem */
   async store(req, res) {
     const problem = await DeliveryProblem.create({
       ...req.body,

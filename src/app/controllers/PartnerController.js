@@ -4,11 +4,13 @@ import * as Yup from 'yup';
 import Partner from '../models/Partner';
 
 class PartnerController {
+  /* Lists all partners */
   async index(req, res) {
     const partners = await Partner.findAll();
     return res.json(partners);
   }
 
+  /* Creates a new partner */
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
@@ -34,6 +36,7 @@ class PartnerController {
     return res.json({ newPartner });
   }
 
+  /* Updates a partner */
   async update(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string(),
@@ -67,6 +70,7 @@ class PartnerController {
     return res.json({ id, name, email, createdAt, updatedAt });
   }
 
+  /* Deletes a partner */
   async delete(req, res) {
     const partner = await Partner.findByPk(req.params.id);
     if (!partner) {

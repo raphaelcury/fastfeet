@@ -3,6 +3,7 @@ import { Op } from 'sequelize';
 import Delivery from '../models/Delivery';
 
 class ClosedDeliveryController {
+  /* Lists all closed deliveries */
   async index(req, res) {
     const deliveries = await Delivery.findAll({
       where: {

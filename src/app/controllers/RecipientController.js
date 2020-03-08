@@ -6,6 +6,42 @@ const stateRegEx = /^[A-Z]{2}$/;
 const errorMessageStateRegEx = 'State must be 2 capital letters';
 
 class RecipientController {
+  /* Lists the recipients */
+  async index(req, res) {
+    const recipientList = await Recipient.findAll();
+    return res.json(recipientList);
+  }
+
+  /* Shows an specific recipient */
+  async show(req, res) {
+    const recipient = await Recipient.findByPk(req.params.id);
+    if (!recipient) {
+      // Bad request
+      return res.status(400).json({ error: 'Recipient not found.' });
+    }
+    const {
+      id,
+      name,
+      address,
+      number,
+      complement,
+      state,
+      city,
+      zip_code,
+    } = recipient;
+    return res.json({
+      id,
+      name,
+      address,
+      number,
+      complement,
+      state,
+      city,
+      zip_code,
+    });
+  }
+
+  /* Creates a recipient */
   async store(req, res) {
     // Input validation
     const schema = Yup.object().shape({
@@ -49,39 +85,7 @@ class RecipientController {
     });
   }
 
-  async index(req, res) {
-    const recipientList = await Recipient.findAll();
-    return res.json(recipientList);
-  }
-
-  async show(req, res) {
-    const recipient = await Recipient.findByPk(req.params.id);
-    if (!recipient) {
-      // Bad request
-      return res.status(400).json({ error: 'Recipient not found.' });
-    }
-    const {
-      id,
-      name,
-      address,
-      number,
-      complement,
-      state,
-      city,
-      zip_code,
-    } = recipient;
-    return res.json({
-      id,
-      name,
-      address,
-      number,
-      complement,
-      state,
-      city,
-      zip_code,
-    });
-  }
-
+  /* Updates a recipient */
   async update(req, res) {
     const recipient = await Recipient.findByPk(req.params.id);
     if (!recipient) {
@@ -130,6 +134,7 @@ class RecipientController {
     });
   }
 
+  /* Deletes a recipient */
   async delete(req, res) {
     const recipient = await Recipient.findByPk(req.params.id);
     if (!recipient) {
