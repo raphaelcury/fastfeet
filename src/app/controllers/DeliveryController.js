@@ -36,7 +36,6 @@ class DeliveryController {
   */
   async index(req, res) {
     let deliveries = [];
-    console.log(req.query.withProblem);
     if (req.query.withProblem === 'true') {
       // Only deliveries with a problem
       deliveries = await deliveryFilter(true);
