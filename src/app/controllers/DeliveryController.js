@@ -31,8 +31,7 @@ class DeliveryController {
   */
 
   /* Lists all the deliveries, deliveries with a problem, or deliveries without
-     a problem
-  */
+     a problem */
   async index(req, res) {
     let deliveries = [];
     if (req.query.withProblem === 'true') {
