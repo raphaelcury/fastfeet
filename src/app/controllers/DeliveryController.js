@@ -4,7 +4,6 @@ import Delivery from '../models/Delivery';
 import DeliveryProblem from '../models/DeliveryProblem';
 
 async function deliveryFilter(withProblem) {
-  console.log('Entered here');
   // First, get all problems
   const deliveryProblems = await DeliveryProblem.findAll({
     include: {
