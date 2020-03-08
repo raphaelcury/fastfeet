@@ -3,54 +3,46 @@ import * as Yup from 'yup';
 import Delivery from '../models/Delivery';
 import DeliveryProblem from '../models/DeliveryProblem';
 
+async function deliveryFilter(withProblem) {
+  console.log('Entered here');
+  // First, get all problems
+  const deliveryProblems = await DeliveryProblem.findAll({
+    include: {
+      model: Delivery,
+      as: 'delivery',
+    },
+  });
+  // Second, get all deliveries and exclude all that have related problems
+  const allDeliveries = await Delivery.findAll({
+    where: { canceled_at: null },
+  });
+  // Filter the deliveries
+  const deliveries = allDeliveries.filter(delivery => {
+    const deliveryProblem = deliveryProblems.find(
+      problem => problem.delivery_id === delivery.id
+    );
+    return withProblem ? deliveryProblem : !deliveryProblem;
+  });
+  return deliveries;
+}
+
 class DeliveryController {
   /* TODO: unify open and closed controllers here. Start and end methods
      should be transformed into an update method, with a query parameter type
   */
 
-  // Lists all the deliveries, or deliveries with a problem
+  /* Lists all the deliveries, deliveries with a problem, or deliveries without
+     a problem
+  */
   async index(req, res) {
     let deliveries = [];
+    console.log(req.query.withProblem);
     if (req.query.withProblem === 'true') {
       // Only deliveries with a problem
-      // First, get problems
-      const deliveryProblems = await DeliveryProblem.findAll({
-        include: {
-          model: Delivery,
-          as: 'delivery',
-        },
-      });
-      // Second, get all deliveries and exclude all that have related problems
-      const allDeliveries = await Delivery.findAll({
-        where: { canceled_at: null },
-      });
-      // Filter only the deliveries that have not problems
-      deliveries = allDeliveries.filter(delivery => {
-        const deliveryProblem = deliveryProblems.find(
-          problem => problem.delivery_id === delivery.id
-        );
-        return deliveryProblem;
-      });
+      deliveries = await deliveryFilter(true);
     } else if (req.query.withProblem === 'false') {
       // Only deliveries without a problem
-      // First, get problems
-      const deliveryProblems = await DeliveryProblem.findAll({
-        include: {
-          model: Delivery,
-          as: 'delivery',
-        },
-      });
-      // Second, get all deliveries and exclude all that have related problems
-      const allDeliveries = await Delivery.findAll({
-        where: { canceled_at: null },
-      });
-      // Filter only the deliveries that have not problems
-      deliveries = allDeliveries.filter(delivery => {
-        const deliveryProblem = deliveryProblems.find(
-          problem => problem.delivery_id === delivery.id
-        );
-        return !deliveryProblem;
-      });
+      deliveries = await deliveryFilter(false);
     } else {
       // All not canceled deliveries
       deliveries = await Delivery.findAll({ where: { canceled_at: null } });
