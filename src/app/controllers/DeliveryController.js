@@ -158,16 +158,24 @@ class DeliveryController {
 
   // Cancel delivery based on a problem
   async delete(req, res) {
-    const delivery = await Delivery.findByPk(req.params.id);
-    if (!delivery) {
+    const problem = await DeliveryProblem.findByPk(req.params.problemId, {
+      include: {
+        model: Delivery,
+        as: 'delivery',
+      },
+    });
+    if (!problem) {
+      return res.status(400).json({ error: 'Problem does not exist' });
+    }
+    if (!problem.delivery) {
       return res.status(400).json({ error: 'Delivery does not exist' });
     }
-    if (delivery.canceled_at) {
+    if (problem.delivery.canceled_at) {
       return res
         .status(400)
         .json({ error: 'Delivery has already been canceled' });
     }
-    const { id, product, canceled_at } = await delivery.update({
+    const { id, product, canceled_at } = await problem.delivery.update({
       canceled_at: new Date(),
     });
     return res.json({
