@@ -3,6 +3,10 @@ import * as Yup from 'yup';
 import Delivery from '../models/Delivery';
 import DeliveryProblem from '../models/DeliveryProblem';
 
+/* TODO: test the relationship in the other direction: Delivery -> Problem
+ * Question: easier to query?
+ */
+
 /* Filters deliveries with or without problems */
 async function deliveryFilter(withProblem) {
   // First, get all problems from active deliveries
