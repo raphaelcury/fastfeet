@@ -34,7 +34,6 @@ routes.put(
   '/partners/:partnerId/openDeliveries/:deliveryId/end',
   OpenDeliveryController.end
 );
-routes.get('/deliveries/:deliveryId/problems', DeliveryProblemController.index);
 routes.post(
   '/deliveries/:deliveryId/problems',
   DeliveryProblemController.store
@@ -55,5 +54,7 @@ routes.post('/deliveries', DeliveryController.store);
 routes.get('/deliveries', DeliveryController.index);
 routes.put('/deliveries/:id', DeliveryController.update);
 routes.delete('/problems/:problemId/cancelDelivery', DeliveryController.delete);
+
+routes.get('/deliveries/:deliveryId/problems', DeliveryProblemController.index);
 
 export default routes;
