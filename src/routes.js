@@ -19,6 +19,8 @@ routes.post('/sessions', SessionController.store); // authentication
 
 // Auth routes
 routes.use(Auth.verifyToken);
+routes.get('/recipients', RecipientController.index);
+routes.get('/recipients/:id', RecipientController.show);
 routes.get('/partners/:partnerId/openDeliveries', OpenDeliveryController.index);
 routes.get(
   '/partners/:partnerId/closedDeliveries',
@@ -40,8 +42,6 @@ routes.post(
 
 // Admin routes
 routes.use(Auth.verifyAdminUser);
-routes.get('/recipients', RecipientController.index);
-routes.get('/recipients/:id', RecipientController.show);
 routes.post('/recipients', RecipientController.store);
 routes.put('/recipients/:id', RecipientController.update);
 routes.delete('/recipients/:id', RecipientController.delete);
