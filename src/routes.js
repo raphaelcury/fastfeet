@@ -19,7 +19,7 @@ import Auth from './app/middlewares/Auth';
 const routes = new Router();
 
 // Component for file upload
-const upload = multer(multerConfig);
+const uploadAvatar = multer(multerConfig.avatars);
 
 // No auth routes
 routes.post('/sessions', SessionController.store); // authentication
@@ -64,7 +64,11 @@ routes.delete('/problems/:problemId/cancelDelivery', DeliveryController.delete);
 
 routes.get('/deliveries/:deliveryId/problems', DeliveryProblemController.index);
 
-// Upload route
-routes.post('/files', upload.single('file'), AvatarController.store);
+// Upload route for partner avatars
+routes.post(
+  '/files/avatars',
+  uploadAvatar.single('file'),
+  AvatarController.store
+);
 
 export default routes;
