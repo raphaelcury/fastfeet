@@ -1,9 +1,9 @@
-import File from '../models/File';
+import Avatar from '../models/Avatar';
 
-class FileController {
+class AvatarController {
   async store(req, res) {
     const { originalname, filename } = req.file;
-    const file = await File.create({
+    const file = await Avatar.create({
       name: originalname,
       path: filename,
     });
@@ -11,4 +11,4 @@ class FileController {
   }
 }
 
-export default new FileController();
+export default new AvatarController();

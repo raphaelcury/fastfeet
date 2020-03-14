@@ -4,7 +4,7 @@ import multerConfig from './config/multer';
 
 // Controllers
 import SessionController from './app/controllers/SessionController';
-import FileController from './app/controllers/FileController';
+import AvatarController from './app/controllers/AvatarController';
 import RecipientController from './app/controllers/RecipientController';
 import PartnerController from './app/controllers/PartnerController';
 import DeliveryController from './app/controllers/DeliveryController';
@@ -65,6 +65,6 @@ routes.delete('/problems/:problemId/cancelDelivery', DeliveryController.delete);
 routes.get('/deliveries/:deliveryId/problems', DeliveryProblemController.index);
 
 // Upload route
-routes.post('/files', upload.single('file'), FileController.store);
+routes.post('/files', upload.single('file'), AvatarController.store);
 
 export default routes;

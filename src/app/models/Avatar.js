@@ -1,7 +1,7 @@
 import Sequelize, { Model } from 'sequelize';
 import 'dotenv/config';
 
-class File extends Model {
+class Avatar extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -20,4 +20,4 @@ class File extends Model {
   }
 }
 
-export default File;
+export default Avatar;
