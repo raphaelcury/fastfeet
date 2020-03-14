@@ -66,7 +66,7 @@ routes.get('/deliveries/:deliveryId/problems', DeliveryProblemController.index);
 
 // Upload route for partner avatars
 routes.post(
-  '/files/avatars',
+  '/partners/:partnerId/files/avatars',
   uploadAvatar.single('file'),
   AvatarController.store
 );
