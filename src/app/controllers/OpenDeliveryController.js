@@ -22,7 +22,7 @@ class OpenDeliveryController {
   }
 
   /* Starts a delivery */
-  async start(req, res) {
+  async update(req, res) {
     const delivery = await Delivery.findOne({
       where: { partner_id: req.params.partnerId, id: req.params.deliveryId },
     });
@@ -66,29 +66,6 @@ class OpenDeliveryController {
       start_date: now,
     });
     return res.json({ id, product, start_date });
-  }
-
-  /* Ends a delivery */
-  async end(req, res) {
-    const delivery = await Delivery.findOne({
-      where: { partner_id: req.params.partnerId, id: req.params.deliveryId },
-    });
-    if (!delivery) {
-      return res.status(400).json({ error: 'Delivery does not exist' });
-    }
-    if (delivery.canceled_at) {
-      return res.status(400).json({ error: 'Delivery has been canceled' });
-    }
-    if (!delivery.start_date) {
-      return res.status(400).json({ error: 'Delivery has not started' });
-    }
-    if (delivery.end_date) {
-      return res.status(400).json({ error: 'Delivery has already ended' });
-    }
-    const { id, product, end_date } = await delivery.update({
-      end_date: new Date(),
-    });
-    return res.json({ id, product, end_date });
   }
 }
 

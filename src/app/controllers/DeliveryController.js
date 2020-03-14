@@ -38,8 +38,8 @@ async function deliveryFilter(withProblem) {
 }
 
 class DeliveryController {
-  /* TODO: unify open and closed controllers here. Start and end methods
-     should be transformed into an update method, with a query parameter type
+  /* TODO: unify open and closed controllers here? Start and end methods
+     should be transformed into an update method, with a query parameter type?
   */
 
   /* Lists all the deliveries, deliveries with a problem, or deliveries without

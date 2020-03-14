@@ -28,11 +28,11 @@ routes.get(
 );
 routes.put(
   '/partners/:partnerId/openDeliveries/:deliveryId/start',
-  OpenDeliveryController.start
+  OpenDeliveryController.update
 );
 routes.put(
   '/partners/:partnerId/openDeliveries/:deliveryId/end',
-  OpenDeliveryController.end
+  ClosedDeliveryController.update
 );
 routes.post(
   '/deliveries/:deliveryId/problems',
