@@ -14,7 +14,7 @@ class Partner extends Model {
   }
 
   static associate(models) {
-    this.hasOne(models.Avatar, { foreignKey: 'partner_id', as: 'avatar' });
+    this.belongsTo(models.Avatar, { foreignKey: 'avatar_id', as: 'avatar' });
   }
 }
 

@@ -25,12 +25,31 @@ class PartnerController {
       email: Yup.string()
         .email()
         .required(),
+      avatar_id: Yup.number(),
     });
     try {
       // abortEarly = false to show all the errors found
       await schema.validate(req.body, { abortEarly: false });
     } catch (error) {
       return res.status(400).json({ validationErrors: error.errors });
+    }
+    /* If it has avatar_id, verifies if the avatar exists and if this avatar
+       already does not belong to another partner */
+    if (req.body.avatar_id) {
+      const avatar = await Avatar.findByPk(req.body.avatar_id);
+      if (!avatar) {
+        return res.status(400).json({ error: 'Avatar does not exist.' });
+      }
+      const partnerWithSameAvatar = await Partner.findOne({
+        where: {
+          avatar_id: req.body.avatar_id,
+        },
+      });
+      if (partnerWithSameAvatar) {
+        return res
+          .status(400)
+          .json({ error: 'Avatar already belongs to other partner' });
+      }
     }
     const partnerWithSameEmail = await Partner.findOne({
       where: {
@@ -49,6 +68,7 @@ class PartnerController {
     const schema = Yup.object().shape({
       name: Yup.string(),
       email: Yup.string().email(),
+      avatar_id: Yup.number(),
     });
     try {
       // abortEarly = false to show all the errors found
@@ -56,15 +76,35 @@ class PartnerController {
     } catch (error) {
       return res.status(400).json({ validationErrors: error.errors });
     }
-    const { id } = req.params;
-    const partner = await Partner.findByPk(id);
+    // Verifies whether the partner exists
+    const partner = await Partner.findByPk(req.params.id);
     if (!partner) {
       return res.status(400).json({ error: 'Partner does not exist' });
     }
+    /* If it has avatar_id, verifies if the avatar exists and if this avatar
+       already does not belong to another partner */
+    if (req.body.avatar_id) {
+      const avatar = await Avatar.findByPk(req.body.avatar_id);
+      if (!avatar) {
+        return res.status(400).json({ error: 'Avatar does not exist.' });
+      }
+      const partnerWithSameAvatar = await Partner.findOne({
+        where: {
+          id: { [Op.not]: req.params.id },
+          avatar_id: req.body.avatar_id,
+        },
+      });
+      if (partnerWithSameAvatar) {
+        return res
+          .status(400)
+          .json({ error: 'Avatar already belongs to other partner' });
+      }
+    }
+    // Verifies if is there another partner with same email
     if (req.body.email) {
       const partnerWithSameEmail = await Partner.findOne({
         where: {
-          id: { [Op.not]: id },
+          id: { [Op.not]: req.params.id },
           email: req.body.email,
         },
       });
@@ -72,7 +112,8 @@ class PartnerController {
         return res.status(400).json({ error: 'Email already exists' });
       }
     }
-    const { name, email, createdAt, updatedAt } = await partner.update(
+    // Finally, updates the partner
+    const { id, name, email, createdAt, updatedAt } = await partner.update(
       req.body
     );
     return res.json({ id, name, email, createdAt, updatedAt });
