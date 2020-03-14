@@ -37,13 +37,13 @@ routes.get(
   ClosedDeliveryController.index
 );
 routes.put(
-  '/partners/:partnerId/openDeliveries/:deliveryId/start',
-  OpenDeliveryController.update
+  '/partners/:partnerId/deliveries/:deliveryId/start',
+  DeliveryController.update
 );
 routes.put(
-  '/partners/:partnerId/openDeliveries/:deliveryId/end',
+  '/partners/:partnerId/deliveries/:deliveryId/end',
   uploadSignature.single('file'),
-  ClosedDeliveryController.update
+  OpenDeliveryController.update
 );
 routes.post(
   '/deliveries/:deliveryId/problems',

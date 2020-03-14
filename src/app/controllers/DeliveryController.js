@@ -1,7 +1,14 @@
+import { startOfDay, endOfDay, isAfter, isBefore } from 'date-fns';
+import { Op } from 'sequelize';
 import * as Yup from 'yup';
 
 import Delivery from '../models/Delivery';
 import DeliveryProblem from '../models/DeliveryProblem';
+
+const MAX_DELIVERIES_PER_DAY = 5;
+
+const MIN_HOUR = 8;
+const MAX_HOUR = 18;
 
 /* TODO: test the relationship in the other direction: Delivery -> Problem
  * Question: easier to query?
@@ -38,10 +45,6 @@ async function deliveryFilter(withProblem) {
 }
 
 class DeliveryController {
-  /* TODO: unify open and closed controllers here? Start and end methods
-     should be transformed into an update method, with a query parameter type?
-  */
-
   /* Lists all the deliveries, deliveries with a problem, or deliveries without
      a problem */
   async index(req, res) {
@@ -99,65 +102,51 @@ class DeliveryController {
     return res.json(delivery);
   }
 
+  /* Starts a delivery */
   async update(req, res) {
-    if (req.body.canceled_at) {
-      return res.status(400).json({
-        error:
-          'You can not cancel a delivery this way. Instead, use the delete method',
-      });
-    }
-    if (req.body.start_date) {
-      return res.status(400).json({
-        error:
-          'You can not start a delivery this way. Instead, use the start method',
-      });
-    }
-    if (req.body.end_date) {
-      return res.status(400).json({
-        error:
-          'You can not end a delivery this way. Instead, use the end method',
-      });
-    }
-    const schema = Yup.object().shape({
-      recipient_id: Yup.number(),
-      partner_id: Yup.number(),
-      product: Yup.string(),
+    const delivery = await Delivery.findOne({
+      where: { partner_id: req.params.partnerId, id: req.params.deliveryId },
     });
-    try {
-      // abortEarly = false to show all the errors found
-      await schema.validate(req.body, { abortEarly: false });
-    } catch (error) {
-      return res.status(400).json({ errors: error.errors });
-    }
-    const delivery = await Delivery.findByPk(req.params.id);
     if (!delivery) {
       return res.status(400).json({ error: 'Delivery does not exist' });
     }
     if (delivery.canceled_at) {
       return res.status(400).json({ error: 'Delivery has been canceled' });
     }
-    const {
-      id,
-      product,
-      canceled_at,
-      start_date,
-      end_date,
-      createdAt,
-      updatedAt,
-      recipient_id,
-      partner_id,
-    } = await delivery.update(req.body);
-    return res.json({
-      id,
-      product,
-      canceled_at,
-      start_date,
-      end_date,
-      createdAt,
-      updatedAt,
-      recipient_id,
-      partner_id,
+    if (delivery.start_date) {
+      return res.status(400).json({ error: 'Delivery has already started' });
+    }
+
+    // Partner can only start MAX_DELIVERIES_PER_DAY deliveries per day
+    const now = new Date();
+    const dayStart = startOfDay(now);
+    const dayEnd = endOfDay(now);
+    const dayDeliveries = await Delivery.findAll({
+      where: {
+        partner_id: req.params.partnerId,
+        start_date: {
+          [Op.between]: [dayStart, dayEnd],
+        },
+      },
     });
+    if (dayDeliveries && dayDeliveries.length >= MAX_DELIVERIES_PER_DAY) {
+      return res.status(400).json({
+        error: `Partner can start only ${MAX_DELIVERIES_PER_DAY} deliveries per day`,
+      });
+    }
+
+    // Deliveries can only start between MIN_HOUR and MAX_HOUR
+    const lowerLimit = dayStart.setHours(MIN_HOUR);
+    const upperLimit = dayStart.setHours(MAX_HOUR);
+    if (isBefore(now, lowerLimit) || isAfter(now, upperLimit)) {
+      return res.status(400).json({
+        error: `Deliveries can only start between ${MIN_HOUR}:00 and ${MAX_HOUR}:00`,
+      });
+    }
+    const { id, product, start_date } = await delivery.update({
+      start_date: now,
+    });
+    return res.json({ id, product, start_date });
   }
 
   // Cancel delivery based on a problem
