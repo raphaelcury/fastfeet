@@ -18,8 +18,11 @@ import Auth from './app/middlewares/Auth';
 // Router component
 const routes = new Router();
 
-// Component for file upload
+// Component for avatar upload
 const uploadAvatar = multer(multerConfig.avatars);
+
+// Component for signature upload
+const uploadSignature = multer(multerConfig.signatures);
 
 // No auth routes
 routes.post('/sessions', SessionController.store); // authentication
@@ -39,6 +42,7 @@ routes.put(
 );
 routes.put(
   '/partners/:partnerId/openDeliveries/:deliveryId/end',
+  uploadSignature.single('file'),
   ClosedDeliveryController.update
 );
 routes.post(
