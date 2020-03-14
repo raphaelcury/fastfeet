@@ -1,5 +1,6 @@
 import Sequelize from 'sequelize';
 
+import File from '../app/models/File';
 import User from '../app/models/User';
 import Recipient from '../app/models/Recipient';
 import Partner from '../app/models/Partner';
@@ -8,7 +9,7 @@ import DeliveryProblem from '../app/models/DeliveryProblem';
 
 import databaseConfig from '../config/database';
 
-const models = [User, Recipient, Partner, Delivery, DeliveryProblem];
+const models = [File, User, Recipient, Partner, Delivery, DeliveryProblem];
 
 class Database {
   constructor() {

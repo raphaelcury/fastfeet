@@ -1,7 +1,10 @@
 import { Router } from 'express';
+import multer from 'multer';
+import multerConfig from './config/multer';
 
 // Controllers
 import SessionController from './app/controllers/SessionController';
+import FileController from './app/controllers/FileController';
 import RecipientController from './app/controllers/RecipientController';
 import PartnerController from './app/controllers/PartnerController';
 import DeliveryController from './app/controllers/DeliveryController';
@@ -12,7 +15,11 @@ import DeliveryProblemController from './app/controllers/DeliveryProblemControll
 // Authentication Middleware
 import Auth from './app/middlewares/Auth';
 
+// Router component
 const routes = new Router();
+
+// Component for file upload
+const upload = multer(multerConfig);
 
 // No auth routes
 routes.post('/sessions', SessionController.store); // authentication
@@ -56,5 +63,8 @@ routes.put('/deliveries/:id', DeliveryController.update);
 routes.delete('/problems/:problemId/cancelDelivery', DeliveryController.delete);
 
 routes.get('/deliveries/:deliveryId/problems', DeliveryProblemController.index);
+
+// Upload route
+routes.post('/files', upload.single('file'), FileController.store);
 
 export default routes;
