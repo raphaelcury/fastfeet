@@ -12,6 +12,10 @@ class Partner extends Model {
 
     return this;
   }
+
+  static associate(models) {
+    this.hasOne(models.Avatar, { foreignKey: 'partner_id', as: 'avatar' });
+  }
 }
 
 export default Partner;

@@ -2,11 +2,19 @@ import { Op } from 'sequelize';
 import * as Yup from 'yup';
 
 import Partner from '../models/Partner';
+import Avatar from '../models/Avatar';
 
 class PartnerController {
   /* Lists all partners */
   async index(req, res) {
-    const partners = await Partner.findAll();
+    const partners = await Partner.findAll({
+      attributes: ['id', 'name', 'email'],
+      include: {
+        model: Avatar,
+        as: 'avatar',
+        attributes: ['name', 'path', 'url'],
+      },
+    });
     return res.json(partners);
   }
 

@@ -18,10 +18,6 @@ class Avatar extends Model {
     );
     return this;
   }
-
-  static associate(models) {
-    this.belongsTo(models.Partner, { foreignKey: 'partner_id', as: 'partner' });
-  }
 }
 
 export default Avatar;
