@@ -12,36 +12,23 @@ const MAX_DELIVERIES_PER_DAY = 5;
 const MIN_HOUR = 8;
 const MAX_HOUR = 18;
 
-/* TODO: test the relationship in the other direction: Delivery -> Problem
- * Question: easier to query?
- */
-
 /* Filters deliveries with or without problems */
 async function deliveryFilter(withProblem) {
-  // First, get all problems from active deliveries
-  const deliveryProblems = await DeliveryProblem.findAll({
-    include: {
-      model: Delivery,
-      as: 'delivery',
-      where: {
-        end_date: null,
-        canceled_at: null,
-      },
-    },
-  });
-  // Second, get all active deliveries
+  // First, get all deliveries
   const allDeliveries = await Delivery.findAll({
     where: {
       end_date: null,
       canceled_at: null,
     },
+    include: {
+      model: DeliveryProblem,
+      as: 'problems',
+    },
   });
   // Filter the deliveries
   const deliveries = allDeliveries.filter(delivery => {
-    const deliveryProblem = deliveryProblems.find(
-      problem => problem.delivery_id === delivery.id
-    );
-    return withProblem ? deliveryProblem : !deliveryProblem;
+    const hasProblems = delivery.problems.length > 0;
+    return withProblem ? hasProblems : !hasProblems;
   });
   return deliveries;
 }
