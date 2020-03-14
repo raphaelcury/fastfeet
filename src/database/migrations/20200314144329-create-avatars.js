@@ -16,6 +16,13 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      partner_id: {
+        type: Sequelize.INTEGER,
+        references: { model: 'partners', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+        allowNull: true,
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
