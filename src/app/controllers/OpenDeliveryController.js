@@ -1,6 +1,8 @@
 import Delivery from '../models/Delivery';
 import Signature from '../models/Signature';
 
+// TODO: Input validation
+
 class OpenDeliveryController {
   /* Lists all open deliveries */
   async index(req, res) {

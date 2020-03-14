@@ -2,6 +2,8 @@ import { startOfDay, endOfDay, isAfter, isBefore } from 'date-fns';
 import { Op } from 'sequelize';
 import * as Yup from 'yup';
 
+// TODO: Input validation
+
 import Delivery from '../models/Delivery';
 import DeliveryProblem from '../models/DeliveryProblem';
 

@@ -1,5 +1,7 @@
 import DeliveryProblem from '../models/DeliveryProblem';
 
+// TODO: Input validation
+
 class DeliveryProblemController {
   /* List all problems from a delivery */
   async index(req, res) {

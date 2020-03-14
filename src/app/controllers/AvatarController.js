@@ -1,5 +1,7 @@
 import Avatar from '../models/Avatar';
 
+// TODO: Input validation
+
 class AvatarController {
   /* Creates a new avatar for a partner */
   async store(req, res) {
