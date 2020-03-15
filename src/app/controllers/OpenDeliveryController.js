@@ -1,8 +1,6 @@
 import Delivery from '../models/Delivery';
 import Signature from '../models/Signature';
 
-// TODO: Input validation
-
 class OpenDeliveryController {
   /* Lists all open deliveries */
   async index(req, res) {
@@ -18,6 +16,11 @@ class OpenDeliveryController {
 
   /* Ends a delivery */
   async update(req, res) {
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ error: 'Signature file not found on request' });
+    }
     // Gets the signature file data
     const { originalname, filename } = req.file;
     // Creates the new signature
