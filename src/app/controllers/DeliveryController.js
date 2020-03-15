@@ -2,8 +2,6 @@ import { startOfDay, endOfDay, isAfter, isBefore } from 'date-fns';
 import { Op } from 'sequelize';
 import * as Yup from 'yup';
 
-// TODO: Input validation
-
 import Delivery from '../models/Delivery';
 import DeliveryProblem from '../models/DeliveryProblem';
 
@@ -140,6 +138,7 @@ class DeliveryController {
 
   // Cancel delivery based on a problem
   async delete(req, res) {
+    // TODO: Adjust query to correspond to the new relationship
     const problem = await DeliveryProblem.findByPk(req.params.problemId, {
       include: {
         model: Delivery,
