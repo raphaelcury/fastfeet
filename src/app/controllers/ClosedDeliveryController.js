@@ -3,8 +3,6 @@ import { Op } from 'sequelize';
 import Delivery from '../models/Delivery';
 import Signature from '../models/Signature';
 
-// TODO: Input validation
-
 class ClosedDeliveryController {
   /* Lists all closed deliveries */
   async index(req, res) {
