@@ -2,8 +2,11 @@ import { resolve } from 'path';
 import express from 'express';
 
 import routes from './routes';
-import './database';
+
 // Calls database to create database connection through models
+import './database';
+
+// TODO: Add exceptions handling
 
 class App {
   constructor() {
