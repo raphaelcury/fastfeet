@@ -4,7 +4,9 @@ class AvatarController {
   /* Creates a new avatar for a partner */
   async store(req, res) {
     if (!req.file) {
-      return res.status(400).json({ error: 'File not found on request' });
+      return res
+        .status(400)
+        .json({ error: 'Avatar file not found on request' });
     }
     const { originalname, filename } = req.file;
     // Creates the new avatar
