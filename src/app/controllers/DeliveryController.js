@@ -138,7 +138,6 @@ class DeliveryController {
 
   // Cancel delivery based on a problem
   async delete(req, res) {
-    // TODO: Adjust query to correspond to the new relationship
     const problem = await DeliveryProblem.findByPk(req.params.problemId, {
       include: {
         model: Delivery,
