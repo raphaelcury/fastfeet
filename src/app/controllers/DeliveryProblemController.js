@@ -1,6 +1,6 @@
-import DeliveryProblem from '../models/DeliveryProblem';
+import * as Yup from 'yup';
 
-// TODO: Input validation
+import DeliveryProblem from '../models/DeliveryProblem';
 
 class DeliveryProblemController {
   /* List all problems from a delivery */
@@ -13,6 +13,15 @@ class DeliveryProblemController {
 
   /* Creates a new delivery problem */
   async store(req, res) {
+    const schema = Yup.object().shape({
+      description: Yup.string().required(),
+    });
+    try {
+      // abortEarly = false to show all the errors found
+      await schema.validate(req.body, { abortEarly: false });
+    } catch (error) {
+      return res.status(400).json({ errors: error.errors });
+    }
     const problem = await DeliveryProblem.create({
       ...req.body,
       delivery_id: req.params.deliveryId,
