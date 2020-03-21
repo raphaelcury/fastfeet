@@ -101,15 +101,11 @@ class DeliveryController {
 
     const delivery = await Delivery.create(req.body);
 
-    try {
-      await Mail.sendMail({
-        to: `${partner.name} <${partner.email}>`,
-        subject: 'Delivery requested!',
-        text: `${partner.name}, a delivery has been requested to you. Please check.`,
-      });
-    } catch (err) {
-      console.log(err);
-    }
+    await Mail.sendMail({
+      to: `${partner.name} <${partner.email}>`,
+      subject: 'Delivery requested',
+      text: `${partner.name}, a delivery has been requested to you. Please check.`,
+    });
 
     return res.json(delivery);
   }
@@ -167,6 +163,10 @@ class DeliveryController {
       include: {
         model: Delivery,
         as: 'delivery',
+        include: {
+          model: Partner,
+          as: 'partner',
+        },
       },
     });
     if (!problem) {
@@ -183,6 +183,13 @@ class DeliveryController {
     const { id, product, canceled_at } = await problem.delivery.update({
       canceled_at: new Date(),
     });
+
+    await Mail.sendMail({
+      to: `${problem.delivery.partner.name} <${problem.delivery.partner.email}>`,
+      subject: 'Delivery canceled',
+      text: `${problem.delivery.partner.name}, a delivery has been canceled. Please check.`,
+    });
+
     return res.json({
       id,
       product,
