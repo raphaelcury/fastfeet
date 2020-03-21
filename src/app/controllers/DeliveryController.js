@@ -2,7 +2,9 @@ import { startOfDay, endOfDay, isAfter, isBefore } from 'date-fns';
 import { Op } from 'sequelize';
 import * as Yup from 'yup';
 
-import Mail from '../../lib/Mail';
+import Queue from '../../lib/Queue';
+
+import DeliveryCreationJob from '../jobs/DeliveryCreationMailJob';
 
 import Partner from '../models/Partner';
 import Recipient from '../models/Recipient';
@@ -101,11 +103,7 @@ class DeliveryController {
 
     const delivery = await Delivery.create(req.body);
 
-    await Mail.sendMail({
-      to: `${partner.name} <${partner.email}>`,
-      subject: 'Delivery requested',
-      text: `${partner.name}, a delivery has been requested to you. Please check.`,
-    });
+    await Queue.add(DeliveryCreationJob.key, { partner });
 
     return res.json(delivery);
   }
