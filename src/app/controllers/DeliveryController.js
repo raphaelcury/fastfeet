@@ -166,10 +166,16 @@ class DeliveryController {
       include: {
         model: Delivery,
         as: 'delivery',
-        include: {
-          model: Partner,
-          as: 'partner',
-        },
+        include: [
+          {
+            model: Partner,
+            as: 'partner',
+          },
+          {
+            model: Recipient,
+            as: 'recipient',
+          },
+        ],
       },
     });
     if (!problem) {
