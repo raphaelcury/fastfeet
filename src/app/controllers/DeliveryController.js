@@ -4,7 +4,8 @@ import * as Yup from 'yup';
 
 import Queue from '../../lib/Queue';
 
-import DeliveryCreationJob from '../jobs/DeliveryCreationMailJob';
+import DeliveryCreationMailJob from '../jobs/DeliveryCreationMailJob';
+import DeliveryCancellationMailJob from '../jobs/DeliveryCancellationMailJob';
 
 import Partner from '../models/Partner';
 import Recipient from '../models/Recipient';
@@ -103,7 +104,7 @@ class DeliveryController {
 
     const delivery = await Delivery.create(req.body);
 
-    await Queue.add(DeliveryCreationJob.key, { partner });
+    await Queue.add(DeliveryCreationMailJob.key, { partner });
 
     return res.json(delivery);
   }
@@ -182,11 +183,7 @@ class DeliveryController {
       canceled_at: new Date(),
     });
 
-    await Mail.sendMail({
-      to: `${problem.delivery.partner.name} <${problem.delivery.partner.email}>`,
-      subject: 'Delivery canceled',
-      text: `${problem.delivery.partner.name}, a delivery has been canceled. Please check.`,
-    });
+    await Queue.add(DeliveryCancellationMailJob.key, { problem });
 
     return res.json({
       id,

@@ -1,8 +1,8 @@
 import Mail from '../../lib/Mail';
 
-class DeliveryCreationMail {
+class DeliveryCreationMailJob {
   get key() {
-    return 'DeliveryCreationMail';
+    return 'DeliveryCreationMailJob';
   }
 
   async handle({ data }) {
@@ -15,4 +15,4 @@ class DeliveryCreationMail {
   }
 }
 
-export default new DeliveryCreationMail();
+export default new DeliveryCreationMailJob();
