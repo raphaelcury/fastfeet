@@ -7,6 +7,8 @@ class DeliveryCancellationMailJob {
 
   async handle({ data }) {
     const { problem } = data;
+
+    // TODO: Mail HTML formatting
     await Mail.sendMail({
       to: `${problem.delivery.partner.name} <${problem.delivery.partner.email}>`,
       subject: 'Delivery cancelled',

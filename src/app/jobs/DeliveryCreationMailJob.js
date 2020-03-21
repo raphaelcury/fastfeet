@@ -7,6 +7,8 @@ class DeliveryCreationMailJob {
 
   async handle({ data }) {
     const { delivery, partner, recipient } = data;
+
+    // TODO: Mail HTML formatting
     await Mail.sendMail({
       to: `${partner.name} <${partner.email}>`,
       subject: 'Delivery requested',
