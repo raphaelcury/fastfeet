@@ -2,6 +2,10 @@ import { startOfDay, endOfDay, isAfter, isBefore } from 'date-fns';
 import { Op } from 'sequelize';
 import * as Yup from 'yup';
 
+import Mail from '../../lib/Mail';
+
+import Partner from '../models/Partner';
+import Recipient from '../models/Recipient';
 import Delivery from '../models/Delivery';
 import DeliveryProblem from '../models/DeliveryProblem';
 
@@ -85,7 +89,28 @@ class DeliveryController {
     } catch (error) {
       return res.status(400).json({ errors: error.errors });
     }
+    // Verifies whether the partner and recipient exist
+    const partner = await Partner.findByPk(req.body.partner_id);
+    if (!partner) {
+      return res.status(400).json({ error: 'Partner does not exist.' });
+    }
+    const recipient = await Recipient.findByPk(req.body.recipient_id);
+    if (!recipient) {
+      return res.status(400).json({ error: 'Recipient does not exist.' });
+    }
+
     const delivery = await Delivery.create(req.body);
+
+    try {
+      await Mail.sendMail({
+        to: `${partner.name} <${partner.email}>`,
+        subject: 'Delivery requested!',
+        text: `${partner.name}, a delivery has been requested to you. Please check.`,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+
     return res.json(delivery);
   }
 
