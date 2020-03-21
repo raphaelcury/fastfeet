@@ -6,11 +6,25 @@ class DeliveryCreationMailJob {
   }
 
   async handle({ data }) {
-    const { partner } = data;
+    const { delivery, partner, recipient } = data;
     await Mail.sendMail({
       to: `${partner.name} <${partner.email}>`,
       subject: 'Delivery requested',
-      text: `${partner.name}, a delivery has been requested to you. Please check.`,
+      text: `${partner.name},
+
+A delivery has been requested to you. Please check data:
+
+Product: ${delivery.product}
+Recipient: ${recipient.name}
+
+Address:
+${recipient.address}${recipient.number ? ` , ${recipient.number}` : ''}${
+        recipient.complement ? ` / ${recipient.complement}` : ''
+      }
+${recipient.city}
+${recipient.state}
+${recipient.zip_code}
+`,
     });
   }
 }
