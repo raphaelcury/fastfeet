@@ -12,7 +12,7 @@ class Mail {
   }
 
   sendMail(message) {
-    return this.transporter.sendMail({
+    return this.transporter.sendddMail({
       ...mailConfig.default,
       ...message,
     });
