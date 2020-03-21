@@ -2,9 +2,10 @@ import 'dotenv/config';
 
 import { resolve } from 'path';
 import express from 'express';
-import 'express-async-errors';
 
 // Global Exception handling
+import 'express-async-errors';
+import Youch from 'youch';
 import * as Sentry from '@sentry/node';
 import sentryConfig from './config/sentry';
 
@@ -30,6 +31,7 @@ class App {
 
     // Global exception handling
     this.server.use(Sentry.Handlers.errorHandler());
+    this.exceptionHandler();
   }
 
   middlewares() {
@@ -44,6 +46,16 @@ class App {
 
   routes() {
     this.server.use(routes);
+  }
+
+  exceptionHandler() {
+    this.server.use(async (err, req, res, next) => {
+      if (process.env.NODE_ENV === 'development') {
+        const errors = await new Youch(err, req).toJSON();
+        return res.status(500).json(errors);
+      }
+      return res.status(500).json({ error: 'Internal server error' });
+    });
   }
 }
 
