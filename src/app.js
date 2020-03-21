@@ -2,6 +2,11 @@ import 'dotenv/config';
 
 import { resolve } from 'path';
 import express from 'express';
+import 'express-async-errors';
+
+// Global Exception handling
+import * as Sentry from '@sentry/node';
+import sentryConfig from './config/sentry';
 
 import routes from './routes';
 
@@ -12,14 +17,24 @@ import './database';
 
 class App {
   constructor() {
+    // Server init
     this.server = express();
+
+    // Global exception handling init
+    Sentry.init(sentryConfig);
+    this.server.use(Sentry.Handlers.requestHandler());
+
+    // Middlewares and routes
     this.middlewares();
     this.routes();
+
+    // Global exception handling
+    this.server.use(Sentry.Handlers.errorHandler());
   }
 
   middlewares() {
+    // Global JSON translation
     this.server.use(express.json());
-
     // 'GET' for static files
     this.server.use(
       '/files',
