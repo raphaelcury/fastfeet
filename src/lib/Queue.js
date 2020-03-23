@@ -36,10 +36,12 @@ class Queue {
   processQueue() {
     jobs.forEach(job => {
       const { queue, handle } = this.queues[job.key];
-      queue
-        .on('failed', (job, err) => Sentry.captureException(err))
-        .process(handle);
+      queue.on('failed', this.handleFailed).process(handle);
     });
+  }
+
+  handleFailed(job, err) {
+    console.log(`Queue ${job.queue.name}: FAILED`, err);
   }
 }
 
