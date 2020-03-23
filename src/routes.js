@@ -41,13 +41,13 @@ routes.get(
 );
 routes.put(
   '/partners/:partnerId/deliveries/:deliveryId/start',
-  DeliveryController.update
-);
+  OpenDeliveryController.start
+); // Delivery start
 routes.put(
   '/partners/:partnerId/deliveries/:deliveryId/end',
   uploadSignature.single('file'),
-  OpenDeliveryController.update
-);
+  OpenDeliveryController.end
+); // Delivery end
 routes.post(
   '/deliveries/:deliveryId/problems',
   DeliveryProblemController.store
@@ -66,7 +66,6 @@ routes.delete('/partners/:id', PartnerController.delete);
 
 routes.post('/deliveries', DeliveryController.store);
 routes.get('/deliveries', DeliveryController.index);
-routes.put('/deliveries/:id', DeliveryController.update);
 routes.delete('/problems/:problemId/cancelDelivery', DeliveryController.delete);
 
 routes.get('/deliveries/:deliveryId/problems', DeliveryProblemController.index);
