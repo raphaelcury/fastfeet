@@ -31,9 +31,12 @@ routes.post('/sessions', SessionController.store); // authentication
 routes.use(Auth.verifyToken);
 routes.get('/recipients', RecipientController.index);
 routes.get('/recipients/:id', RecipientController.show);
-routes.get('/partners/:partnerId/openDeliveries', OpenDeliveryController.index);
 routes.get(
-  '/partners/:partnerId/closedDeliveries',
+  '/partners/:partnerId/deliveries/open',
+  OpenDeliveryController.index
+);
+routes.get(
+  '/partners/:partnerId/deliveries/closed',
   ClosedDeliveryController.index
 );
 routes.put(
