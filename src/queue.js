@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 // Queue initialization
 import Queue from './lib/Queue';
 
