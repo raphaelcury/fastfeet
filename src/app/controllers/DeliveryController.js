@@ -106,6 +106,8 @@ class DeliveryController {
     return res.json(delivery);
   }
 
+  // TODO: Update the delivery (admin)
+
   // Cancel delivery based on a problem
   async delete(req, res) {
     const problem = await DeliveryProblem.findByPk(req.params.problemId, {

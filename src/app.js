@@ -14,8 +14,6 @@ import routes from './routes';
 // Calls database to create database connection through models
 import './database';
 
-// TODO: Add exceptions handling
-
 class App {
   constructor() {
     // Server init
